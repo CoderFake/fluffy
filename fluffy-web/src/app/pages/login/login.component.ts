@@ -81,20 +81,24 @@ export class LoginComponent implements OnInit {
    * @param event Sự kiện form submit
    */
   onLogin(event: Event): void {
-    event.preventDefault(); // Ngăn chặn hành vi mặc định của form
+    event.preventDefault();
     this.isLoading = true;
     this.errorMessage = '';
-
+  
     // Kiểm tra form hợp lệ
     if (!this.email || !this.password) {
       this.errorMessage = 'Vui lòng nhập đầy đủ email và mật khẩu';
       this.isLoading = false;
       return;
     }
-
+  
+    console.log('Đang gửi request đăng nhập với email:', this.email);
+  
     // Gọi service đăng nhập
     this.authService.login({ email: this.email, password: this.password }).subscribe({
       next: (response) => {
+        console.log('Đăng nhập thành công:', response);
+        
         // Lưu remember me nếu được chọn
         if (this.rememberMe) {
           localStorage.setItem('rememberedEmail', this.email);
@@ -106,8 +110,17 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/']);
       },
       error: (error) => {
-        console.error('Lỗi đăng nhập:', error);
-        this.errorMessage = error.message || 'Email hoặc mật khẩu không đúng, vui lòng thử lại!';
+        console.error('Lỗi đăng nhập chi tiết:', error);
+        
+        // Cải thiện xử lý lỗi
+        if (typeof error === 'string') {
+          this.errorMessage = error;
+        } else if (error instanceof Error) {
+          this.errorMessage = error.message || 'Email hoặc mật khẩu không đúng';
+        } else {
+          this.errorMessage = 'Không thể đăng nhập. Vui lòng thử lại sau.';
+        }
+        
         this.isLoading = false;
       },
       complete: () => {

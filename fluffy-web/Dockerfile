@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Xây dựng ứng dụng
-RUN npm run build
+RUN npm run
 
 # Giai đoạn chạy (run)
 FROM nginx:alpine

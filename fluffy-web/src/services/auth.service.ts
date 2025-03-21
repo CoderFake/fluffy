@@ -46,7 +46,7 @@ export class AuthService {
    * URL của API backend
    * @private
    */
-  private apiUrl = 'http://localhost:4000/api/auth';
+  private apiUrl = 'http://localhost:3000/api/auth';
   
   /**
    * Key lưu trữ token trong localStorage
