@@ -1,0 +1,94 @@
+<div class="container">
+    <div class="signup-section">
+        <img src="assets/images/signup/logoFluffy.png" alt="Fluffy Logo">
+    </div>
+    <div class="signup-box">
+        <h2 class="title">ĐĂNG KÝ</h2>
+        
+        <!-- Signup form -->
+        <form (ngSubmit)="onSignup()">
+          <!-- Email input -->
+          <div class="input-group">
+            <input 
+              type="email" 
+              [(ngModel)]="email" 
+              name="email" 
+              placeholder="Nhập email" 
+              required
+              [disabled]="isLoading">
+          </div>
+          
+          <!-- Password input -->
+          <div class="input-group password-group">
+            <input 
+              [type]="showPassword ? 'text' : 'password'" 
+              [(ngModel)]="password" 
+              name="password" 
+              placeholder="Nhập mật khẩu" 
+              required
+              [disabled]="isLoading">
+            <span class="toggle-password" (click)="togglePasswordVisibility()">
+              {{ showPassword ? '🙈' : '👁️' }}
+            </span>
+          </div>
+          
+          <!-- Confirm password input -->
+          <div class="input-group password-group">
+            <input 
+              [type]="showConfirmPassword ? 'text' : 'password'" 
+              [(ngModel)]="confirmPassword" 
+              name="confirmPassword" 
+              placeholder="Xác nhận mật khẩu" 
+              required
+              [disabled]="isLoading">
+            <span class="toggle-password" (click)="toggleConfirmPasswordVisibility()">
+              {{ showConfirmPassword ? '🙈' : '👁️' }}
+            </span>
+          </div>
+          
+          <!-- Terms of use -->
+          <div class="term-of-use">
+            <label>
+              <input 
+                type="checkbox" 
+                [(ngModel)]="agreeToTerms" 
+                name="agreeToTerms"
+                [disabled]="isLoading"> 
+              Xác nhận đăng kí với điều kiện sử dụng thông tin của Fluffy
+            </label>
+          </div>
+          
+          <!-- Error message -->
+          <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+          
+          <!-- Signup button -->
+          <button 
+            type="submit" 
+            class="signup-btn"
+            [disabled]="isLoading">
+            {{ isLoading ? 'Đang đăng ký...' : 'Đăng ký' }}
+          </button>
+          
+          <!-- Login link -->
+          <div class="login">
+            <div>Đã có tài khoản?</div>
+            <a class="login-text" routerLink="/login">Đăng nhập</a>
+          </div>
+          
+          <hr class="hr">
+  
+          <!-- Social signup -->
+          <div class="social-login">
+            <p><b>Hoặc đăng ký với</b></p>
+            <div class="social-buttons">
+              <a href="https://www.facebook.com/" target="_blank" class="social-btn facebook">
+                <img src="assets/images/signup/facebook.png" alt="Facebook"> 
+              </a>
+              <a href="https://accounts.google.com/" target="_blank" class="social-btn google">
+                <img src="assets/images/signup/google.png" alt="Google">
+              </a>
+            </div>
+          </div>
+        </form>
+    </div>
+</div>

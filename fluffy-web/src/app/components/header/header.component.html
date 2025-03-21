@@ -1,0 +1,76 @@
+<header class="header">
+  <div class="menu">
+    <div class="logo" [routerLink]="['/']" style="cursor: pointer;">
+      <img src="/assets/images/logo/logo.jpg" alt="Logo">
+      <div>
+        <h1>FLUFFY STORE</h1>
+        <p>Warm hug, warm heart</p>
+      </div>
+    </div>
+    <div class="search-bar">
+      <input type="text" placeholder="Tìm kiếm sản phẩm">
+      <i class="fas fa-search"></i>
+    </div>
+    <div class="nav-icons">
+      <a>
+        <div>
+          <i class="fas fa-truck"></i>
+          <span>Tra cứu <br> đơn hàng</span>
+        </div>
+      </a>
+      <a class="cart-icon" (click)="openCart($event)">
+        <div class="header-cart-icon">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-badge" *ngIf="cartItemCount > 0">{{ cartItemCount }}</span>
+          <span>Giỏ <br> hàng</span>
+        </div>
+      </a>
+      <a>
+        <div>
+          <i class="fas fa-bell"></i>
+          <span>Thông <br> báo</span>
+        </div>
+      </a>
+      <!-- Hiển thị nút đăng nhập/đăng ký khi chưa đăng nhập -->
+      <a *ngIf="!isLoggedIn" [routerLink]="['/login']">
+        <div>
+          <i class="fas fa-user"></i>
+          <span>Đăng nhập/ <br> Đăng ký</span>
+        </div>
+      </a>
+      <!-- Hiển thị thông tin người dùng khi đã đăng nhập -->
+      <a *ngIf="isLoggedIn" [routerLink]="['/account-settings']">
+        <div>
+          <i class="fas fa-user"></i>
+          <span>{{ userName || 'Tài khoản' }}</span>
+          <!-- Menu con khi click vào tài khoản (tùy chọn) -->
+          <div *ngIf="isUserMenuOpen" class="user-menu">
+            <ul>
+              <li><a [routerLink]="['/account-settings']">Thông tin tài khoản</a></li>
+              <li><a [routerLink]="['/account-settings/orders']">Đơn hàng của tôi</a></li>
+              <li><a [routerLink]="['/account-settings/wishlist']">Sản phẩm yêu thích</a></li>
+              <li><a (click)="logout()">Đăng xuất</a></li>
+            </ul>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <nav class="nav" [ngClass]="{'sticky-nav': isScrolled}">
+    <div class="menu">
+      <a [routerLink]="['/']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <div class="menu-item">TRANG CHỦ</div>
+      </a>
+      <a [routerLink]="['/product-page']" routerLinkActive="active">
+        <div class="menu-item">SẢN PHẨM <i class="fas fa-chevron-down"></i></div>
+      </a>
+      <a [routerLink]="['/product-page']" routerLinkActive="active">
+        <div class="menu-item">BỘ SƯU TẬP <i class="fas fa-chevron-down"></i></div>
+      </a>
+      <a [routerLink]="['/about-fluffy']" routerLinkActive="active">
+        <div class="menu-item">VỀ FLUFFY</div>
+      </a>
+    </div>
+  </nav>
+</header>

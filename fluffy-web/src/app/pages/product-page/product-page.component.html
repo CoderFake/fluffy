@@ -1,0 +1,34 @@
+<div class="container">
+
+    <!-- Loading state -->
+    <div *ngIf="loading" class="loading-container">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Đang tải...</span>
+        </div>
+        <p>Đang tải danh sách sản phẩm...</p>
+    </div>
+
+
+    <!-- Error state -->
+
+    <div *ngIf="error" class="error-container">
+        <div class="alert alert-danger">
+            <p>{{ error }}</p>
+            <button class="btn btn-primary" (click)="ngOnInit()">Thử lại</button>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <ng-container *ngIf="!loading && !error">
+        <div class="sidebar">
+            <app-filter [products]="products" (filterChange)="handleFilter($event)"></app-filter>
+        </div>
+        <div class="main-content">
+            <app-sort (sortChange)="handleSort($event)"></app-sort>
+            <app-product-list 
+                [products]="sortedProducts"
+                [noProductsMessage]="noProductsMessage">
+            </app-product-list>     
+        </div>
+    </ng-container>
+</div>

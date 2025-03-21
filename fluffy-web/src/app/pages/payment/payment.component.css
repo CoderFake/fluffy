@@ -1,0 +1,162 @@
+.container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
+    background-color: #F4F4F4;
+    gap: 20px;
+}
+.checkout-form, .payment-method {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    margin-bottom: 20px;
+    max-width: 800px;
+}
+.order-summary {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    margin-bottom: 20px;
+    max-width: 400px;
+    height: 400px;
+}
+
+.checkout-form h2, .payment-method h2, .order-summary h2 {
+    color: #EB5265;
+    font-size: 24px;
+    margin: 5px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.checkout-form .login {
+    display: flex;
+    justify-content: space-between;  
+    align-items: center;
+    width: 100%;
+}
+.checkout-form .login img {
+    width: 30px;  
+    height: 30px;  
+    margin-right: 10px;  
+    vertical-align: middle; 
+}
+.checkout-form .login a {
+    font-size: 16px;
+    text-decoration: none;
+    color: black;
+    margin-bottom: 10px;
+    vertical-align: middle; 
+}
+.checkout-form input, .checkout-form select, .checkout-form textarea {
+    width: 100%; 
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box; 
+}
+.checkout-form input[type="checkbox"]{
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: #EB5265;
+}
+.checkout-form input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: #EB5265;
+}
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+.checkbox-container span {
+    font-size: 16px;
+    margin-left: 5px; 
+}
+.bank-info {
+    background-color: #F4F4F4;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.product {
+    display: flex;
+    align-items: center;
+}
+.product img {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+}
+.product-name {
+    font-weight: bold;
+    color: #EB5265;
+    font-size: 16px;
+    margin-left: 10px;
+}
+.info {
+    font-size: 12px;
+    margin: 10px;
+}
+.price-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+}
+.promo {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center; 
+    width: 100%; 
+}
+.promo img {
+    width: 20px;  
+    height: 20px; 
+    margin-right: -90px;
+}
+.promo-text {
+    font-size: 16px;
+    color: black;
+}
+.promo-link {
+    font-size: 16px;
+    text-decoration: none;
+}
+
+.total-price {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.order-btn {
+    display: block;
+    margin: 20px auto 0 auto;
+    background-color: #EB5265;
+    color: white;
+    padding: 12px 20px;
+    width: 50%;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.order-btn:hover {
+    background-color: #d81b60;
+}

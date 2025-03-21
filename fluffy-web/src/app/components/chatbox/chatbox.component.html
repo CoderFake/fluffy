@@ -1,0 +1,83 @@
+<div class="chatbox-container" [class.minimized]="!isOpen">
+    <div *ngIf="!isOpen" class="chat-button" (click)="toggleChat()">
+      <img src="../../../assets/icons/chatbox.png" alt="Chat Icon" class="chat-icon" />
+    </div>
+    
+    <div *ngIf="isOpen" class="chatbox">
+      <div class="chatbox-header">
+        <div class="header-text">Trợ lý mua sắm</div>
+        <div class="header-actions">
+          <button class="minimize-btn" (click)="toggleChat()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="18 15 12 9 6 15"></polyline>
+            </svg>
+          </button>
+        </div>
+      </div>
+      
+      <div class="chatbox-content">
+        <div class="advisor-selection">
+          <p class="selection-text">Bạn muốn nhận tư vấn từ:</p>
+          
+          <div class="advisor-options">
+            <div class="advisor-option" [class.selected]="selectedAdvisor === 'ai'" (click)="selectAdvisor('ai')">
+              <div class="advisor-icon-container">
+                <img src="../../../assets/icons/chatbox.png" class="advisor-icon" />
+              </div>
+              <div class="advisor-label">Trợ lý AI</div>
+            </div>
+            
+            <div class="advisor-option" [class.selected]="selectedAdvisor === 'human'" (click)="selectAdvisor('human')">
+              <div class="advisor-icon-container">
+                <img src="../../../assets/icons/People.png" alt="Human Advisor" class="advisor-icon" />
+              </div>
+              <div class="advisor-label">Tư vấn viên</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="chat-messages" *ngIf="selectedAdvisor">
+          <div class="message ai-message">
+            <div class="message-avatar">
+              <img src="../../../assets/icons/chatbox.png" alt="AI Avatar" />
+            </div>
+            <div class="message-content">
+              <p>Xin chào! Mình là trợ lý AI của bạn tại Fluffy. Mình đang phát triển nên không phải lúc nào cũng đúng đâu.</p>
+              <p>Mình sẵn sàng giúp bạn với câu hỏi về chính sách và tìm kiếm sản phẩm. Hôm nay bạn cần mình hỗ trợ gì không? ^^</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="chat-input">
+          <input 
+            type="text" 
+            placeholder="Nhập nội dung" 
+            [(ngModel)]="messageText"
+            (keyup.enter)="sendMessage()"
+          />
+          <div class="input-actions">
+            <button class="action-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                <polyline points="21 15 16 10 5 21"></polyline>
+              </svg>
+            </button>
+            <button class="action-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="3" y1="8" x2="21" y2="8"></line>
+                <line x1="8" y1="3" x2="8" y2="21"></line>
+              </svg>
+            </button>
+            <button class="action-btn send-btn" (click)="sendMessage()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

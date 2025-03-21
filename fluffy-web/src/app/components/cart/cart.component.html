@@ -1,0 +1,61 @@
+<!-- Phần overlay tối nền -->
+<div class="cart-overlay" *ngIf="isOpen" (click)="closeCart()"></div>
+
+
+<!-- Phần nội dung giỏ hàng -->
+<div class="container" *ngIf="isOpen" (click)="stopPropagation($event)">
+  <div class="header">
+    <h1>Giỏ hàng</h1>
+    <button (click)="closeCart()"><i class="fas fa-times"></i></button>
+  </div>
+
+
+  <div class="select-all">
+    <input type="checkbox" id="select-all-checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll()" /> Chọn tất cả
+    <span class="delete-all" (click)="deleteAll()">Xóa tất cả</span>
+  </div>
+
+
+  <div id="cart-container">
+    <div *ngFor="let product of products" class="cart-item">
+      <input type="checkbox" [(ngModel)]="product.selected" (change)="toggleSelectProduct(product)" class="product-checkbox" />
+      <img [src]="product.image" alt="{{ product.product_name }}" />
+      <div class="cart-item-details">
+        <h2>{{ product.product_name }}</h2>
+        <div class="cart-item-controls">
+          <button (click)="changeQuantity(product, false)" class="decrease">-</button>
+          <input type="text" [(ngModel)]="product.quantity" class="quantity" readonly />
+          <button (click)="changeQuantity(product, true)" class="increase">+</button>
+          <select class="tags">
+            <option *ngFor="let color of product.color.selected_colors">{{ color }}</option>
+          </select>
+          <select class="dimensions">
+            <option *ngFor="let size of product.size.available_sizes">{{ size }}</option>
+          </select>
+        </div>
+        <div class="cart-item-prices">
+          <span>{{ product.discount_price | number }}đ</span>
+          <span class="original-price">{{ product.pricing.original_price | number }}đ</span>
+          <span class="remove" (click)="deleteProduct(product)">Xóa sản phẩm</span>
+        </div>
+      </div>
+      <div class="cart-item-total">{{ product.totalPrice | number: '1.0-0' }}đ</div>
+    </div>
+  </div>
+
+
+  <div class="promo-code">
+    <div><i class="fas fa-tag"></i> <span>Mã khuyến mãi</span></div>
+    <button>Chọn mã <i class="fas fa-chevron-right"></i></button>
+  </div>
+
+
+  <div class="total">
+    <span>Tổng tiền:</span> <span class="total-amount">{{ totalAmount | number: '1.0-0' }}đ</span>
+  </div>
+
+
+  <div class="checkout">
+    <button (click)="goToCheckout()">THANH TOÁN</button>
+  </div>
+</div>

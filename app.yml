@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./fluffy-server
+      dockerfile: Dockerfile
+    container_name: fluffy-backend
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=development
+      - PORT=4000
+      - MONGO_URI=mongodb://mongodb:27017/fluffy_store
+      - JWT_SECRET=abcdefghjklmnopqrstuvwxyz123456
+      - JWT_EXPIRES_IN=1d
+      - CORS_ORIGIN=http://localhost:4200
+    depends_on:
+      - mongodb
+    networks:
+      - fluffy-network
+
+  frontend:
+    build:
+      context: ./fluffy-web
+      dockerfile: Dockerfile
+    container_name: fluffy-frontend
+    restart: unless-stopped
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    networks:
+      - fluffy-network
+
+networks:
+  fluffy-network:
+    driver: bridge

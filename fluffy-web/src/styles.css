@@ -1,0 +1,39 @@
+/* You can add global styles to this file, and /* Reset CSS */
+:root{
+    --primary-color: #eb5265;
+    --secondary-color: #F7D0E2;
+    --neutral-color: #d4d4d4;
+    --hover-button: #d13145;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  html, body {
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+    font-family: 'Quicksand';
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+  }
+  
+  app-root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+  }
+  
+  /* Để footer luôn ở cuối trang */
+  router-outlet + * {
+    flex: 1;
+  }

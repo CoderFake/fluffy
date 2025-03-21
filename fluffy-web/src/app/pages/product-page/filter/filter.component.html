@@ -1,0 +1,68 @@
+<!-- product-filter.component.html -->
+<div class="filter-container">
+  <div class="filter-header">
+    <div class="filter-title">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#e45a77">
+        <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/>
+      </svg>
+      <span class="title-text">Bộ lọc</span>
+    </div>
+  </div>
+  
+  <div class="filter-section">
+    <div class="section-header" (click)="toggleSection('category')">
+      <span class="plus-icon">{{ expandedSections.category ? '−' : '+' }}</span>
+      <span>Danh mục sản phẩm</span>
+    </div>
+    <div class="section-content" [class.expanded]="expandedSections.category">
+      <div *ngFor="let collection of collections" class="filter-option">
+        <label>
+          <input type="checkbox" 
+                 [checked]="selectedCollections.includes(collection)"
+                 (change)="onCollectionChange($event, collection)">
+          {{ collection }}
+        </label>
+      </div>
+    </div>    
+  </div>
+  
+  <div class="filter-divider"></div>
+  
+  <div class="filter-section">
+    <div class="section-header" (click)="toggleSection('price')">
+      <span class="plus-icon">{{ expandedSections.price ? '−' : '+' }}</span>
+      <span>Khoảng giá</span>
+    </div>
+    <div class="section-content" [class.expanded]="expandedSections.price">
+      <div class="price-range">
+        <input type="number" class="price-input" placeholder="Từ" [(ngModel)]="priceRange.min">
+        <span class="price-separator">−</span>
+        <input type="number" class="price-input" placeholder="Đến" [(ngModel)]="priceRange.max">
+      </div>
+      <div *ngIf="errorMessage" class="error-message" style="color: red; margin-top: 10px;">
+        {{ errorMessage }}
+      </div>
+    </div>
+  </div>
+  
+  <div class="filter-divider"></div>
+  
+  <div class="filter-section">
+    <div class="section-header" (click)="toggleSection('color')">
+      <span class="plus-icon">{{ expandedSections.color ? '−' : '+' }}</span>
+      <span>Màu sắc</span>
+    </div>
+    <div class="section-content" [class.expanded]="expandedSections.color">
+      <div *ngFor="let color of colors" class="filter-option">
+        <label>
+          <input type="checkbox" 
+                 [checked]="selectedColors.includes(color)"
+                 (change)="onColorChange($event, color)">
+          {{ color }}
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button class="apply-button" (click)="applyFilters()">ÁP DỤNG</button>

@@ -1,0 +1,17 @@
+<div class="sort-container">
+    <span class="filter-title">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#e45a77">
+          <path d="M3 18v-2h6v2H3zm12-4v4l4-4h-4zm0-2h4l-4-4v4zM3 6v2h18V6H3zm0 7h12v-2H3v2z"/>
+        </svg>
+        <span class="title-text">Sắp xếp</span>
+    </span>
+  <select (change)="onSortChange($event)" class="sort-select">
+    <option value="">Mặc định</option>
+    <option value="price-asc">Giá: Thấp đến cao</option>
+    <option value="price-desc">Giá: Cao đến thấp</option>
+    <option value="rating-asc">Đánh giá: Thấp đến cao</option>
+    <option value="rating-desc">Đánh giá: Cao đến thấp</option>
+    <option value="name-asc">Tên: A-Z</option>
+    <option value="name-desc">Tên: Z-A</option>
+  </select>
+</div>

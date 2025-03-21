@@ -1,0 +1,31 @@
+<div class="product-list">
+    <!-- Thông báo khi không có sản phẩm -->
+    <div *ngIf="products.length === 0 && noProductsMessage" class="no-products-message">
+        {{ noProductsMessage }}
+    </div>
+
+    <!-- Hiển thị danh sách sản phẩm -->
+    <div *ngIf="products.length > 0" class="product-grid">
+        <div *ngFor="let product of paginatedProducts">
+            <app-product-card [product]="product" (click)="navigateToProduct(product.product_id)"></app-product-card>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+        <button class="page-nav" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">
+            <span class="arrow">‹</span>
+        </button>
+        
+        <button class="page-number" 
+                *ngFor="let page of getPageNumbers()"
+                [class.active]="page === currentPage"
+                (click)="goToPage(page)">
+            {{ page }}
+        </button>
+        
+        <button class="page-nav" [disabled]="currentPage === totalPages" (click)="goToPage(currentPage + 1)">
+            <span class="arrow">›</span>
+        </button>
+    </div>
+</div>  

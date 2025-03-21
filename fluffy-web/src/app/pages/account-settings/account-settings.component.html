@@ -1,0 +1,111 @@
+<div class="main-container">
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <h2>CÀI ĐẶT</h2>
+      </div>
+      <div class="menu">
+        <div class="menu-item" (click)="onMenuItemClick('profile')" [class.active]="activeTab === 'profile'">
+          <img src="https://img.icons8.com/?size=100&id=85147&format=png&color=EB5265" alt="User Icon" class="menu-icon">
+          <h4>Thông tin cá nhân</h4>
+        </div>
+        <div class="menu-item" (click)="onMenuItemClick('address')" [class.active]="activeTab === 'address'">
+          <img src="https://img.icons8.com/?size=100&id=kzcQaYg7aTjb&format=png&color=EB5265" alt="Address Icon" class="menu-icon">
+          <h4>Quản lý địa chỉ</h4>
+        </div>
+        <div class="menu-item" (click)="onMenuItemClick('password')" [class.active]="activeTab === 'password'">
+          <img src="https://img.icons8.com/?size=100&id=114069&format=png&color=EB5265" alt="Password Icon" class="menu-icon">
+          <h4>Thay đổi mật khẩu</h4>
+        </div>
+        <div class="menu-item" (click)="onMenuItemClick('orders')" [class.active]="activeTab === 'orders'">
+          <img src="https://img.icons8.com/?size=100&id=GTySxZvudPmy&format=png&color=EB5265" alt="Order Icon" class="menu-icon">
+          <h4>Quản lý đơn hàng</h4>
+        </div>
+        <div class="menu-item" (click)="onMenuItemClick('favorites')" [class.active]="activeTab === 'favorites'">
+          <img src="https://img.icons8.com/?size=100&id=DxIsF9smUsRE&format=png&color=EB5265" alt="Favorite Icon" class="menu-icon">
+          <h4>Xem danh sách yêu thích</h4>
+        </div>
+        <div class="menu-item" (click)="onMenuItemClick('vouchers')" [class.active]="activeTab === 'vouchers'">
+          <img src="https://img.icons8.com/?size=100&id=15895&format=png&color=EB5265" alt="Voucher Icon" class="menu-icon">
+          <h4>Xem kho voucher</h4>
+        </div>
+        <div class="menu-item" (click)="onMenuItemClick('logout')" [class.active]="activeTab === 'logout'">
+          <img src="https://img.icons8.com/?size=100&id=22112&format=png&color=EB5265" alt="Logout Icon" class="menu-icon">
+          <h4>Đăng xuất</h4>
+        </div>
+      </div>
+    </div>
+  
+    <div class="form-container"  style="text-align: center;">
+        <img src="https://img.icons8.com/?size=100&id=85147&format=png&color=EB5265" alt="Logout Icon" class="menu-icon">
+      <h2>THÔNG TIN CÁ NHÂN</h2>
+      <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label>Họ và tên</label>
+          <input #fullNameInput type="text" formControlName="fullName" placeholder="Nhập họ và tên" [readonly]="!isEditing">
+          <button type="button" (click)="toggleEdit(fullNameInput, 'fullName')" class="edit-btn">
+            <img src="https://img.icons8.com/?size=100&id=vQvt9bZ2oaYT&format=png&color=EB5265">
+          </button>
+          
+        </div>
+  
+  
+        <div class="form-group">
+          <label>Ngày sinh</label>
+          <div class="dob-group">
+            <select formControlName="day">
+              <option *ngFor="let day of days" [value]="day">{{ day }}</option>
+            </select>
+            <select formControlName="month">
+              <option *ngFor="let month of months" [value]="month.value">{{ month.label }}</option>
+            </select>
+            <select formControlName="year">
+              <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+            </select>
+          </div>
+        </div>
+  
+  
+        <div class="form-group">
+          <label>Số điện thoại</label>
+          <input #phoneInput type="tel" formControlName="phone" placeholder="Nhập số điện thoại" [readonly]="!isEditing">
+          <button type="button" (click)="toggleEdit(phoneInput, 'phone')" class="edit-btn">
+            <img src="https://img.icons8.com/?size=100&id=vQvt9bZ2oaYT&format=png&color=EB5265">
+          </button>
+          <div class="error-message" *ngIf="profileForm.get('phone')?.touched && profileForm.get('phone')?.invalid">
+            <small *ngIf="profileForm.get('phone')?.hasError('pattern')">* Số điện thoại không hợp lệ.</small>
+          </div>
+        </div>
+  
+  
+        <div class="form-group">
+          <label>Email</label>
+          <input #emailInput type="email" formControlName="email" placeholder="Nhập email" [readonly]="!isEditing">
+          <button type="button" (click)="toggleEdit(emailInput, 'email')" class="edit-btn">
+            <img src="https://img.icons8.com/?size=100&id=vQvt9bZ2oaYT&format=png&color=EB5265">
+          </button>
+          
+        </div>
+  
+  
+        <div class="social-links">
+          <label style="color:#EB5265; font-weight: bold;">Liên kết mạng xã hội</label>
+          <div class="social-links">
+            <div class="social-item">
+              <img src="https://img.icons8.com/?size=100&id=uLWV5A9vXIPu&format=png&color=000000" alt="Facebook">
+              <span>Facebook</span>
+              <button class="btn btn_update_status_info login-facebook" (click)="updateFacebook()">Cập nhật</button>
+            </div>
+            <div class="social-item">
+              <img src="https://img.icons8.com/color/48/google-logo.png" alt="Google">
+              <span>Google</span>
+              <button class="btn linked" (click)="updateGoogle()">{{ socialConnections.google ? 'Đã liên kết' : 'Cập nhật' }}</button>
+            </div>
+          </div>
+        </div>
+        <div class="btn submit">
+          <button type="submit" [disabled]="!profileForm.valid || !isEditing" class="save-btn">Lưu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  

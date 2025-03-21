@@ -1,0 +1,89 @@
+<div class = "container">
+  <div class="checkout-container">
+    <!-- Checkout Form -->
+    <div class="checkout-form">
+      <div class="login">
+        <h2>Thông tin mua hàng</h2>
+        <a href="#" class="login-btn">
+          <img src="https://img.icons8.com/?size=100&id=85147&format=png&color=EB5265"> Đăng nhập
+        </a>
+      </div>
+      <form>
+        <input type="text" [(ngModel)]="orderDetails.name" name="name" placeholder="Họ và tên" required>
+        <input type="email" [(ngModel)]="orderDetails.email" name="email" placeholder="Email" required>
+        <input type="tel" [(ngModel)]="orderDetails.phone" name="phone" placeholder="Số điện thoại" required>
+        <select><option>Chọn Tỉnh/Thành phố</option></select>
+        <select><option>Chọn Quận/Huyện</option></select>
+        <select ><option>Chọn Phường/Xã</option></select>
+        <input type="text" [(ngModel)]="orderDetails.address" name="address" placeholder="Địa chỉ chi tiết" required>
+        <textarea [(ngModel)]="orderDetails.note" name="note" placeholder="Ghi chú mua hàng (nếu có)"></textarea>
+
+        <label class="checkbox-container">
+          <input type="checkbox" [(ngModel)]="orderDetails.giftWrap">
+          <span class="text">Dịch vụ gói quà</span>
+        </label>
+        <label class="checkbox-container">
+          <input type="checkbox" [(ngModel)]="orderDetails.vacuumSeal">
+          <span class="text">Dịch vụ hút chân không</span>
+        </label>
+      </form>
+    </div>
+
+    <!-- Payment Method -->
+    <div class="payment-method">
+      <h2>Phương thức thanh toán</h2>
+      <label class="checkbox-container">
+        <input type="radio" [(ngModel)]="orderDetails.paymentMethod" name="paymentMethod" value="cod">
+        <span class="text">Thanh toán khi nhận hàng</span>
+      </label>
+      <label class="checkbox-container">
+        <input type="radio" [(ngModel)]="orderDetails.paymentMethod" name="paymentMethod" value="bank">
+        <span class="text">Thanh toán qua ngân hàng</span>
+      </label>
+      <div class="bank-info" *ngIf="orderDetails.paymentMethod === 'bank'">
+        <p>Ngân hàng MB Bank</p>
+        <p>STK: 0795446148</p>
+        <p>Trần Thị Thùy Trang</p>
+        <p><i>Nội dung chuyển khoản: "Số điện thoại bạn dùng để nhận hàng"</i></p>
+      </div>
+      <label class="checkbox-container">
+        <input type="radio" [(ngModel)]="orderDetails.paymentMethod" name="paymentMethod" value="wallet">
+        <span class="text">Thanh toán bằng ví điện tử</span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Order Summary -->
+  <div class="order-summary">
+    <h2>Đơn hàng (1 sản phẩm)</h2>
+    <div class="product">
+      <img src="assets/images/payment/gấu bông capybara.png" alt="Gấu bông Capybara">
+      <div>
+        <p class="product-name">Gấu bông CapyBara</p>
+        <p class="info">
+          Màu sắc: <b>Nâu</b>
+<br> Số lượng: <b>1</b>
+          <br> Kích thước: <b>35cm</b>
+        </p>
+      </div>
+    </div>
+    <div class="price-info">
+      <p class="label">Tạm tính:</p>
+      <p class="value">230,000đ</p>
+    </div>
+    <div class="price-info">
+      <p class="label">Phí vận chuyển:</p>
+      <p class="value">0đ</p>
+    </div>
+    <div class="promo">
+      <img src="https://img.icons8.com/?size=100&id=12089&format=png&color=000000">
+      <span class="promo-text"> Mã khuyến mãi</span>
+      <a href="#" class="promo-link" onclick="applyPromo()">Chọn mã ></a>
+    </div>
+    <div class="total-price">
+      <p>Tổng cộng:</p>
+      <p>230,000đ</p>
+    </div>
+    <button class="order-btn" (click)="onSubmit()">Đặt hàng</button>
+  </div>
+</div>

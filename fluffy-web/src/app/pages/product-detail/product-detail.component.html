@@ -1,0 +1,402 @@
+<!-- Loading indicator -->
+<div *ngIf="loading" class="loading-container text-center p-5">
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Đang tải...</span>
+  </div>
+  <p class="mt-3">Đang tải thông tin sản phẩm...</p>
+</div>
+
+<!-- Error message -->
+<div *ngIf="error" class="error-container text-center p-5">
+  <div class="alert alert-danger">
+    <p>{{ error }}</p>
+    <button class="btn btn-primary mt-2" (click)="loadProductDetails()">Thử lại</button>
+  </div>
+</div>
+
+<!-- Product Detail -->
+<div class="product-detail-container" *ngIf="!loading && !error && product">
+  <div class="container product-detail">
+      <div class="row general-info">
+        <!-- Cột ảnh sản phẩm -->
+        <div class="col-md-6 product-images">
+          <img [src]="product.images && product.images.length > 0 ? product.images[0] : product.image" 
+               class="img-fluid main-image" 
+               [alt]="product.product_name">
+          <div class="thumbnail-list" *ngIf="product.images && product.images.length > 1">
+            <img src="../../assets/icons/primary-previous.png" class="thumbnail-nav-btn" alt="previous">
+            <ng-container *ngFor="let image of product.images.slice(0, 3)">
+              <img [src]="image" class="thumbnail" [alt]="product.product_name">
+            </ng-container>
+            <img src="../../assets/icons/primary-next.png" class="thumbnail-nav-btn" alt="next">
+          </div>
+        </div>
+  
+        <!-- Cột thông tin sản phẩm -->
+        <div class="col-md-6 product-info">
+          <div class="avg-review" *ngIf="product.rating">
+            {{ product.rating.toFixed(1) }}
+            <i class="fas fa-star"></i> 
+            <i class="fas fa-star"></i> 
+            <i class="fas fa-star"></i> 
+            <i class="fas fa-star"></i> 
+            <i class="fas fa-star"></i> 
+            | 15 đánh giá
+          </div>
+          <div class="product-title-container">
+            <h1 class="product-title">{{ product.product_name }}</h1>
+            <button class="favorite-button" [class.active]="isFavorite" (click)="toggleFavorite()">
+              <i class="fas fa-heart"></i>
+            </button>
+          </div>
+          <hr>
+          <div class="price-container">
+            <span class="discounted-price" *ngIf="product.pricing?.discount_percentage">
+              {{calculateDiscountedPrice(product.pricing.original_price, product.pricing.discount_percentage)}}
+            </span>
+            <span class="original-price" [class.has-discount]="product.pricing?.discount_percentage">
+              {{product.pricing?.original_price}}
+            </span>
+          </div>
+  
+          <div class="product-options">
+            <div class="color-option" *ngIf="product.color && product.color.selected_colors && product.color.selected_colors.length > 0">
+              <p>Màu sắc: {{ selectedColor }}</p>
+              <div class="color-option-list">
+                <ng-container *ngFor="let color of product.color.selected_colors">
+                  <div 
+                    class="color-option-item"
+                    [class.active]="selectedColor === color"
+                    (click)="selectColor(color)">
+                    {{ color }}
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+
+            <div class="size-option" *ngIf="product.size && product.size.available_sizes && product.size.available_sizes.length > 0">
+              <p>Kích thước: {{ selectedSize }}</p> 
+              <div class="size-option-list">
+                <ng-container *ngFor="let size of product.size.available_sizes">
+                  <button 
+                    class="size-btn" 
+                    [class.active]="selectedSize === size"
+                    (click)="selectSize(size)">{{ size }}</button>
+                </ng-container>
+              </div>
+            </div>
+
+            <div class="quantity-option">
+              <p>Số lượng: </p>
+              <div class="quantity-controls">
+                <button class="quantity-btn" (click)="decreaseQuantity()">-</button>
+                <input type="number" [(ngModel)]="quantity" min="1" class="quantity-input">
+                <button class="quantity-btn" (click)="increaseQuantity()">+</button>
+              </div>
+            </div>
+        </div>
+
+        <div class="button-buy-option">
+          <button class="add-to-cart" (click)="addToCart()">Thêm vào giỏ hàng</button>
+          <button class="buy-now" (click)="buyNow()">Mua ngay</button>
+        </div>
+        <hr>
+        <div class="product-benefits">
+          <ul class="product-benefits-list">
+            <li><img src="../../assets/icons/product-detail/tick_done.png" alt=""> 100% bông trắng tinh khiết</li>
+            <li><img src="../../assets/icons/product-detail/tick_done.png" alt="">Miễn phí gói quà</li>
+            <li><img src="../../assets/icons/product-detail/tick_done.png" alt=""> Bảo hành 6 tháng</li>
+          </ul>
+
+          <ul class="product-benefits-list">
+            <li><img src="../../assets/icons/product-detail/tick_done.png" alt=""> 100% ảnh chụp tại shop</li>
+            <li><img src="../../assets/icons/product-detail/tick_done.png" alt=""> Bảo hành Bông gấu 6 tháng</li>
+            <li><img src="../../assets/icons/product-detail/tick_done.png" alt=""> Miễn phí tặng thiệp</li>
+          </ul>
+        </div>
+      </div>
+  
+      <!-- Mô tả sản phẩm -->
+      <section class="product-description">
+        <h2 class="section-title">Mô tả sản phẩm</h2>
+  
+        <p class="description-text">
+          {{ product.description || 'Chưa có mô tả chi tiết cho sản phẩm này.' }}
+        </p>
+  
+        <button class="read-more-button">
+          <span>Xem thêm</span>
+          <img
+            src="../../assets/icons/product-detail/read_more.png"
+            class="read-more-icon"
+            alt="Read more"
+          />
+        </button>
+      </section>
+  
+      <!-- Đánh giá sản phẩm -->
+      <section class="reviews-section">
+        <h2 class="section-title">Đánh giá sản phẩm</h2>
+  
+        <div class="reviews-header">
+          <div class="average-rating">
+            <div class="rating-score-container">
+              <span class="rating-score">{{product?.rating || 0}}</span>
+              <div class="rating-stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </div>
+            </div>
+            <span class="total-reviews">15 đánh giá</span>
+          </div>
+  
+          <div class="rating-breakdown">
+            <div class="rating-row">
+              <span class="star-count">5</span>
+              <div class="star-icon">
+                <i class="fas fa-star"></i>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 80%"></div>
+              </div>
+              <span class="rating-count">12 đánh giá</span>
+            </div>
+  
+            <div class="rating-row">
+              <span class="star-count">4</span>
+              <div class="star-icon">
+                <i class="fas fa-star"></i>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 20%"></div>
+              </div>
+              <span class="rating-count">3 đánh giá</span>
+            </div>
+  
+            <div class="rating-row">
+              <span class="star-count">3</span>
+              <div class="star-icon">
+                <i class="fas fa-star"></i>
+              </div>
+              <div class="progress-bar"></div>
+              <span class="rating-count">0 đánh giá</span>
+            </div>
+  
+            <div class="rating-row">
+              <span class="star-count">2</span>
+              <div class="star-icon">
+                <i class="fas fa-star"></i>
+              </div>
+              <div class="progress-bar"></div>
+              <span class="rating-count">0 đánh giá</span>
+            </div>
+  
+            <div class="rating-row">
+              <span class="star-count">1</span>
+              <div class="star-icon">
+                <i class="fas fa-star"></i>
+              </div>
+              <div class="progress-bar"></div>
+              <span class="rating-count">0 đánh giá</span>
+            </div>
+          </div>
+  
+          <div class="review-cta">
+            <p class="review-prompt">
+              Chia sẽ đánh giá của bạn về sản phẩm này
+            </p>
+            <button class="write-review-button">
+              <img src="../../assets/icons/product-detail/write_review.png" alt="Write" class="write-icon">
+              Viết đánh giá</button>
+          </div>
+        </div>
+  
+        <div class="reviews-list">
+          <article class="review-item">
+            <div class="review-header">
+              <h3 class="reviewer-name">Mẫn Nhi</h3>
+              <div class="review-rating"> 
+                <i class="fas fa-star"></i> 
+                <i class="fas fa-star"></i> 
+                <i class="fas fa-star"></i> 
+                <i class="fas fa-star"></i> 
+                <i class="fas fa-star"></i> 
+              </div>
+              <div class="verified-purchase">
+                <span>Đã mua hàng online</span>
+              </div>
+            </div>
+  
+            <p class="review-date">2024-10-07 14:51 | Phân loại hàng: Nâu-35cm</p>
+  
+            <p class="review-content">
+              Vì là tín đồ của gấu bông đặc biệt là capybara nên k có gì để chê
+              Hàng về như hình. Cho shop 5 sao
+            </p>
+  
+            <div class="review-images">
+              <img
+                src="https://res.cloudinary.com/dkci9bzkj/image/upload/v1741704703/feedback3_ebyj04.jpg"
+                class="review-image"
+                alt="Review image"
+              />
+              <img
+                src="https://res.cloudinary.com/dkci9bzkj/image/upload/v1741704704/feedback4_diwnbl.jpg"
+                class="review-image"
+                alt="Review image"
+              />
+            </div>
+          </article>
+  
+          <article class="review-item">
+            <div class="review-header">
+              <h3 class="reviewer-name">Lan Nguyễn</h3>
+              <div class="review-rating"> 
+                <i class="fas fa-star"></i> 
+                <i class="fas fa-star"></i> 
+                <i class="fas fa-star"></i> 
+                <i class="fas fa-star"></i> 
+                <i class="fas fa-star"></i> 
+              </div>
+              <div class="verified-purchase">
+                <span>Đã mua hàng online</span>
+              </div>
+            </div>
+  
+            <p class="review-date">2024-10-07 14:51 | Phân loại hàng: Nâu-45cm</p>
+  
+            <p class="review-content">
+              Gấu đẹp chuẩn form ko bị méo mó hay đứt chỉDây kéo mượt ko bị vướng
+              mắc bông
+            </p>
+  
+            <div class="review-images">
+              <img
+                src="https://res.cloudinary.com/dkci9bzkj/image/upload/v1741704704/feedback1_ufcp7g.jpg"
+                class="review-image"
+                alt="Review image"
+              />
+              <img
+                src="https://res.cloudinary.com/dkci9bzkj/image/upload/v1741704703/capy_%C4%91eo_cap_wz9v6x.jpg"
+                class="review-image"
+                alt="Review image"
+              />
+            </div>
+          </article>
+  
+          <article class="review-item">
+            <div class="review-header">
+              <h3 class="reviewer-name">Hiếu thứ ba</h3>
+              <div class="review-rating"> 
+                <i class="fas fa-star"></i> 
+                <i class="fas fa-star"></i> 
+                <i class="fas fa-star"></i> 
+                <i class="fas fa-star"></i> 
+                <i class="fas fa-star"></i> 
+              </div>
+              <div class="verified-purchase">
+                <span>Đã mua hàng online</span>
+              </div>
+            </div>
+  
+            <p class="review-date">2024-10-07 14:51 | Phân loại hàng: Nâu-35cm</p>
+  
+            <p class="review-content">
+              Đẹp lắm luôn shop ơi. Đặt con 70cm không nghĩ nó to đùng như vậy. Bé
+              nhà mình chắc chắn sẽ rất thích, hôm trước chị đòi mua con tầm 50cm
+              thôi. Gấu bông mềm xịn sò chứ không phải thu như gấu bông bày bán ở
+              ngoài. Giá tốt nữa chứ. Quá đã!
+            </p>
+  
+            <div class="review-images">
+              <img
+                src="https://res.cloudinary.com/dkci9bzkj/image/upload/v1741704704/capy2_xezphg.jpg"
+                class="review-image"
+                alt="Review image"
+              />
+              <img
+                src="https://res.cloudinary.com/dkci9bzkj/image/upload/v1741704704/feedback2_panqhn.jpg"
+                class="review-image"
+                alt="Review image"
+              />
+            </div>
+          </article>
+  
+          <article class="review-item">
+            <div class="review-header">
+              <h3 class="reviewer-name">Huyền Trang</h3>
+              <div class="review-rating"> 
+                <i class="fas fa-star"></i> 
+                <i class="fas fa-star"></i> 
+                <i class="fas fa-star"></i> 
+                <i class="fas fa-star"></i> 
+                <i class="fas fa-star"></i> 
+              </div>
+              <div class="verified-purchase">
+                <span>Đã mua hàng online</span>
+              </div>
+            </div>
+  
+            <p class="review-date">
+              2024-10-07 14:51 | Phân loại hàng: Nâu-35cm, Xanh-35cm
+            </p>
+  
+            <p class="review-content">
+              Gấu bông rất đẹp, bông mềm mại bé nhà mình rất thích, giao hàng
+              nhanh rất hài lòng gửi tặng shop 5 sao lần sau sẽ quay lại mua tiếp
+            </p>
+  
+            <div class="review-images">
+              <img
+                src="https://res.cloudinary.com/dkci9bzkj/image/upload/v1741918431/capy_matcha_rp6nsg.jpg"
+                class="review-image"
+                alt="Review image"
+              />
+              <img
+                src="https://res.cloudinary.com/dkci9bzkj/image/upload/v1741704704/capy2_xezphg.jpg"
+                class="review-image"
+                alt="Review image"
+              />
+            </div>
+          </article>
+        </div>
+  
+        <div class="pagination">
+          <img src="../../assets/icons/product-detail/previous.png" alt="Previous" class="page-review-nav">
+          <span class="page-number active">1</span>
+          <span class="page-number">2</span>
+          <span class="page-number">3</span>
+          <span class="page-number">4</span>
+          <span class="page-number">5</span>
+          <img src="../../assets/icons/product-detail/next.png" alt="Previous" class="page-review-nav">
+        </div>
+        
+      </section>
+
+      <!-- Sản phẩm liên quan -->
+      <section class="related-products" *ngIf="relatedProducts.length > 0">
+        <div class="section-header">
+          <h2 class="section-title">Sản phẩm liên quan</h2>
+          <button class="view-more-button" [routerLink]="['/product-page']">Xem thêm</button>
+        </div>
+        <div class="products-slider">
+          <button class="slider-nav prev-button">
+            <img src="assets/icons/product-detail/chevrons_left.png" alt="Previous">
+          </button>
+          <div class="related-products-grid">
+            <app-product-card 
+              *ngFor="let product of relatedProducts.slice(0, displayCount)" 
+              [product]="product"
+              (click)="navigateToRelatedProduct(product.product_id)">
+            </app-product-card>
+          </div>
+          <button class="slider-nav next-button">
+            <img src="assets/icons/product-detail/chevrons_right.png" alt="Next">
+          </button>
+        </div>
+      </section>
+    </div>
+</div>
