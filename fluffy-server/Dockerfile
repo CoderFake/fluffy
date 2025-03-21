@@ -13,7 +13,7 @@ RUN npm install --production
 COPY . .
 
 # Expose port
-EXPOSE 4000
+EXPOSE 3000
 
 # Khởi động ứng dụng
 CMD ["node", "server.js"]

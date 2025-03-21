@@ -19,7 +19,8 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, 'Mật khẩu là bắt buộc'],
-    minlength: [6, 'Mật khẩu phải có ít nhất 6 ký tự']
+    minlength: [6, 'Mật khẩu phải có ít nhất 6 ký tự'],
+    maxlength: [100, 'Mật khẩu quá dài'] // Đảm bảo đủ độ dài cho hash bcrypt
   },
   
   // Cookie để nhận dạng người dùng, unique
@@ -57,25 +58,21 @@ const userSchema = new mongoose.Schema({
   timestamps: false
 });
 
-/**
- * Hash mật khẩu trước khi lưu vào database
- * Middleware "pre-save"
- */
-userSchema.pre('save', async function(next) {
-  // Chỉ hash mật khẩu nếu nó được sửa đổi hoặc mới
-  if (!this.isModified('password')) return next();
-  
-  try {
-    // Tạo salt với độ phức tạp 10
-    const salt = await bcrypt.genSalt(10);
-    
-    // Hash mật khẩu với salt
-    this.password = await bcrypt.hash(this.password, salt);
-    next();
-  } catch (error) {
-    next(error);
-  }
-});
+// userSchema.pre('save', async function(next) {
+//   // Chỉ hash mật khẩu nếu nó được sửa đổi hoặc mới
+//   if (!this.isModified('password')) return next();
+//   
+//   try {
+//     // Tạo salt với độ phức tạp 10
+//     const salt = await bcrypt.genSalt(10);
+//     
+//     // Hash mật khẩu với salt
+//     this.password = await bcrypt.hash(this.password, salt);
+//     next();
+//   } catch (error) {
+//     next(error);
+//   }
+// });
 
 /**
  * Method kiểm tra mật khẩu có đúng không
@@ -83,7 +80,14 @@ userSchema.pre('save', async function(next) {
  * @returns {Promise<boolean>} Kết quả so sánh
  */
 userSchema.methods.comparePassword = async function(candidatePassword) {
-  return await bcrypt.compare(candidatePassword, this.password);
+  try {
+    console.log('So sánh mật khẩu trong model User');
+    const isMatch = await bcrypt.compare(candidatePassword, this.password);
+    return isMatch;
+  } catch (error) {
+    console.error('Lỗi khi so sánh mật khẩu:', error);
+    return false; // Trả về false nếu có lỗi
+  }
 };
 
 /**

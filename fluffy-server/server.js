@@ -12,7 +12,7 @@ dotenv.config();
 
 // Khởi tạo Express app
 const app = express();
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 3000;
 
 // Kết nối đến MongoDB
 const db = require('./config/db');
